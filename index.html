@@ -1,159 +1,96 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Extreme Strong Password Generator</title>
-  </head>
-  <style type="text/css">
-    html,
-    body {
-      text-align: center;
-    }
-
-    h1 {
-      font-weight: bold;
-      font-size: 1.5em;
-      color: purple;
-    }
-
-    #main {
-      margin-top: 10%;
-    }
-
-    #submit {
-      padding: 10px;
-      background-color: #008000;
-      color: #FFF;
-      font-size: 1em;
-      font-weight: 700;
-      border-radius: 5px;
-      text-transform: uppercase;
-    }
-
-    #password {
-      padding: 6px 10px;
-      font-weight: bold;
-      font-size: 1.4em;
-    }
-
-    .row {
-      margin: 10px 0;
-    }
-
-    .slider-container {
-      width: 100%;
-      text-align: center;
-    }
-
-    .slider {
-      -webkit-appearance: none;
-      width: 75%;
-      height: 15px;
-      border-radius: 5px;
-      background: #dadde9;
-      outline: none;
-      opacity: 0.7;
-      transition: opacity .2s;
-      margin-top: 10px;
-    }
-
-    .slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      background: #6495ED;
-      cursor: pointer;
-    }
-
-    .slider::-moz-range-thumb {
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      background: #6495ED;
-      cursor: pointer;
-    }
-
-    form {
-      width: 350px;
-      margin: 0 auto;
-    }
-  </style>
-  <body>
-    <h1>Extreme Strong Password Generator</h1>
-    <div id="main">
-      <form action="">
-        <div class="row">
-          <label for="password-length">Password Length:</label>
-          <input
-            type="number"
-            id="password-length"
-            min="8"
-            max="20"
-            value="8"
-          />
-        </div>
-        <div class="slider-container">
-          <input
-            type="range"
-            class="slider"
-            id="myRange"
-            min="8"
-            max="20"
-            v-model="length"
-            value="8"
-          />
-        </div>
-        <input
-          type="submit"
-          value="Generate Password"
-          id="submit"
-        />
-        <div class="row">
-          <div>
-            <label for="password">Your Password:</label>
-            <input type="text" id="password" value="" />
-          </div>
-        </div>
-      </form>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        // Event Listener for Generate Password Button
-        const submitBtn = document.querySelector("#submit");
-
-        submitBtn.addEventListener("click", event => {
-          event.preventDefault();
-
-          let passwordLength = document.querySelector("#password-length").value;
-          let passwordField = document.querySelector("#password");
-          let password = generatePassword(passwordLength);
-
-          passwordField.value = password;
-        });
-
-        // Generate a strong password
-        function generatePassword(length) {
-          let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%^&*1234567890";
-          let password = "";
-
-          for (let i = 0; i < length; i++) {
-            let randomNumber = Math.floor(Math.random() * chars.length);
-            password += chars[randomNumber];
-          }
-
-          let strength = zxcvbn(password).score;
-          if (strength < 3) {
-            // If the complexicity score is less than 3 then generate another password
-            return generatePassword(length);
-          }
-
-          // Return the generated password
-          return password;
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Strong Password Generator</title>
+	<style>
+		body {
+			background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+        .container {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: center;
         }
-      });
+    
+        .card {
+            background-color: #fff;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+            width: 400px;
+        }
+    
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin: 0 0 20px;
+        }
+    
+        p {
+            color: #666;
+            font-size: 18px;
+            margin: 0 0 10px;
+        }
+    
+        button {
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+    
+        button:hover {
+            background-color: #3e8e41;
+        }
+    
+        input {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #333;
+            font-size: 16px;
+            margin: 0 0 10px;
+            padding: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+	<div class="container">
+		<div class="card">
+			<h1>Strong Password Generator</h1>
+			<p>Click the button below to generate a new strong password:</p>
+			<button onclick="generatePassword()">Generate Password</button>
+			<input type="text" id="password" readonly>
+		</div>
+	</div>
+
+    <script>
+        function generatePassword() {
+            var length = 20;
+            var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[];:<>,.?/";
+            var password = "";
+            for (var i = 0, n = charset.length; i < length; ++i) {
+                password += charset.charAt(Math.floor(Math.random() * n));
+            }
+            document.getElementById("password").value = password;
+        }
     </script>
-  </body>
+    
+</body>
 </html>
+    
