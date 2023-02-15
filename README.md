@@ -1,5 +1,5 @@
 # Strong Password Generator
-A simple web page that generates strong passwords with user-defined length.
+[A simple web page that generates strong passwords with user-defined length.](https://mrhumanrebel.github.io/strong_password_generator/)
 
 # Usage
 To use the password generator:
